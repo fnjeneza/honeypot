@@ -1,0 +1,23 @@
+\documentclass[12pt, a4paper]{report}
+\usepackage[utf8]{inputenc}
+\usepackage[francais]{babel}
+\usepackage{lmodern}
+\usepackage{graphicx}
+\usepackage[margin=2cm]{geometry}
+\usepackage{pdfpages}
+\renewcommand{\thesection}{\arabic{section}}
+
+%\title{Rapport Projet\\ \bf{Conception d'un Moteur de recherche}}
+%\author{François Njeneza}
+%\date{Octobre, 2015}
+
+\begin{document}
+	%\maketitle
+	\input{introduction}
+	\input{solution}
+	\input{definition}
+	%\includepdf{spampot.pdf}
+	\input{fonctionnement}
+	\input{deroulement}
+	\includepdf{spampot.pdf}
+\end{document}
