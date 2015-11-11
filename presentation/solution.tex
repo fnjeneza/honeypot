@@ -1,21 +1,18 @@
 \section{Solution envisagée}
 Afin de contrer ces techniques de vol d'informations, une des solutions 
-envisagée est la mise
-en place d'un analyseur de mails couplé à un système de sécurité 
-\emph{Pot de miel}, qui aura pour rôle de:
+envisagée est la mise en place d'un  système de sécurité 
+\emph{Pot de miel}, qui aura pour rôle, à partir d'une URL de:
 \begin{itemize}
-	\item identifier les urls frauduleux dans un mail\footnote{
-			l'identification
-			d'urls dans un mail est une solution déjà développée},
-	\item utiliser ces urls et compléter le formulaire de demande
+	\item extraire les champs à compléter, générer les données 
+		correpondates;
+	\item compléter le formulaire de demande
 		d'informations personnelles 
-		avec des données factices,\footnote{L'idée est que le hacker 
+		avec les données factices\footnote{L'idée est que le hacker 
 		ne sache pas que ce sont des données factices.}
 	\item black-lister l'adresse IP associée à une requête 
 		d'authentification utilisant les données factices qui auront 
-		été  au préalable stockées
-		dans une base de données.
+		été  au préalable stockées		dans une base de données.
 \end{itemize}
 
-Cette technique permettra donc de repérer les adresses IP utilisées pour une 
-intrusion  dans le système.
+Cette technique permettra donc de repérer les adresses IP utilisées pour 
+une intrusion  dans le système.
