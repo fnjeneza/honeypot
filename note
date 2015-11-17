@@ -1,0 +1,10 @@
+Le premier fichier à être chargé et le fichier de configuration en cas 
+d'erreur les logs sont dans le dossier par défaut "/var/log/honeypot/"
+
+S'assurer du droit d'écriture dans le fichier /var/log
+
+Dans le fichier de configuration :
+Une configuration par ligne.
+Les commentaires commencent par des #
+
+Remettre le niveau des handlers du log à INFO et non DEBUG
