@@ -20,7 +20,7 @@ def load_configuration(config_file=None):
     if config_file is None:
         config_file ="config/main.conf"
         
-    config={} # configuration parameters
+    configs={} # configuration parameters
     if path.exists(config_file):
         with open(config_file) as conf:
             nb_line=0
@@ -34,7 +34,7 @@ def load_configuration(config_file=None):
                 if len(line)!=2:
                     raise Exception("Incorrect syntax, line "+str(nb_line))
 
-                config[line[0].strip()] = line[1].strip()
+                configs[line[0].strip()] = line[1].strip()
 
     else:
         raise Exception('Configuration file unfound')
