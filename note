@@ -8,3 +8,14 @@ Une configuration par ligne.
 Les commentaires commencent par des #
 
 Remettre le niveau des handlers du log à INFO et non DEBUG
+
+Commentaire en anglais
+
+respecter le FHS
+sinon donner le nom de l'environnement
+
+Idée: Pour (facilité)une bonne maintenance et évoution. Chaque module
+développer est indépendant des autres. Ainsi, des exceptions sont utilisés
+à la place des logs pour assurer cette indépendance. Ces exceptions seront
+toutesfois à la base de logs dans l'agregateur de finals.
+
