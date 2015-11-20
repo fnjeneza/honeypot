@@ -2,3 +2,4 @@ presentation.tar.xz
 leboulleux/
 test/__pycache__
 __pycache__
+*.swp
