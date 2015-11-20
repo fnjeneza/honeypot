@@ -19,3 +19,9 @@ développer est indépendant des autres. Ainsi, des exceptions sont utilisés
 à la place des logs pour assurer cette indépendance. Ces exceptions seront
 toutesfois à la base de logs dans l'agregateur de finals.
 
+Le développement du module pour la récupération des champs
+se base sur du html4 et 5. Dans le html5 de nouveau champs ont été crée.
+Ces champs n'ont pas été pris en compte.
+
+
+Ajouter un chemin absolue pour la recherche de config_file
