@@ -4,7 +4,8 @@ __author__ = "fnjeneza"
 
 from urllib.request import urlopen
 from html.parser import HTMLParser
-
+from http.client import HTTPConnection, HTTPSConnection
+from urllib.parse import urlparse, urlencode
 
 class _HPHTMLParser(HTMLParser):
     """
@@ -82,8 +83,35 @@ def retrieve_input_attr(url):
     
     return hp.get_input_attr()
 
-def submit_form():
+def submit_form(url, params, userAgent=None):
     """
     submit the form with completed input
     """
-    pass
+
+    u = urlparse(url)
+    scheme = u.scheme # protocol http or https
+    host = u.hostname
+    port = None
+    if u.port is not None:
+        port = u.port
+    path = u.path
+
+    if userAgent==None:
+        #default User Agent
+        header = {'User-Agent':("Mozilla/5.0 (X11; Ubuntu; Linux x86_64; "
+        "rv:24.0) Gecko/20100101 Firefox/24.0)")}
+    header["Content-Type"]="application/x-www-form-urlencoded"
+
+    if(scheme.find("https")>=0):
+        #connection
+        conn = HTTPSConnection(host,port)
+    else:
+        conn = HTTPConnection(host,port)
+
+    data = urlencode(params)
+
+    req = conn.request('POST', path, data, header) #request
+    resp = conn.getresponse() #response
+    code = resp.getcode() # returned code
+
+    return code
