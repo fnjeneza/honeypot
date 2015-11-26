@@ -25,3 +25,15 @@ Ces champs n'ont pas été pris en compte.
 
 
 Ajouter un chemin absolue pour la recherche de config_file
+
+setcookie in post header
+
+Les inputs de types Checkbox non cochés ne sont as envoyé dans le 
+formulaire
+Ni les inputs de type reset
+
+gestion de action dans le formaulaire, lorsque action contient un chemin relatif
+
+
+Faut-il avant d'envoyer le formalaire faire une requete pour récupérer
+le cookie??? et le lien de action???
