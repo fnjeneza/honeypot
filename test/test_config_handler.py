@@ -26,5 +26,5 @@ def test_retrieve_input_attr():
     attr = retrieve_input_attr(("https://cas.unicaen.fr/login?"
     "service=https%3A%2F%2Fwebmail.unicaen.fr%3A443%2Fpublic"
     "%2Fpreauth-unicaen-fr.jsp"))
-    #print(attr)
-    assert attr==""
+    print(attr)
+    assert  attr==""

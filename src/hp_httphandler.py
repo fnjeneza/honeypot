@@ -15,11 +15,18 @@ class _HPHTMLParser(HTMLParser):
         HTMLParser.__init__(self)
         #check if <form> start
         self.__is_form_opened = False
-        self.__inputtags=[] 
+        self.__inputtags={"form":None,
+                "inputs":[]}
 
     def handle_starttag(self, tag, attrs):
         if tag=="form":
+            attr_temp={}
             self.__is_form_opened = True
+            attr_type = ["method", "action"]
+            for attr in attrs:
+                if attr[0] in attr_type:
+                    attr_temp[attr[0]] = attr[1]
+            self.__inputtags["form"]=attr_temp
 
         if tag == "input" and self.__is_form_opened:
             attr_temp={}
@@ -27,7 +34,7 @@ class _HPHTMLParser(HTMLParser):
             for attr in attrs:
                 if attr[0] in attr_type:
                     attr_temp[attr[0]]=attr[1]
-            self.__inputtags.append(attr_temp)
+            self.__inputtags["inputs"].append(attr_temp)
     
     def get_input_attr(self):
         """
