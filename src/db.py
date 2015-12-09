@@ -5,79 +5,119 @@ __author__ = 'fnjeneza'
 import sqlite3 as sql
 import random
 
-#connection to the base
-conn = sql.connect('sql/honeypot.db')
-
-cur = conn.cursor()
-
-
-def generatePeopleInfo():
-    """
-    Generate people information (first name, last name, email, password)
-    return  (cn, email, password)
-    cn will be common name e.g: Jean Dupont
-    """
-    # last_name
-    cur.execute( "SELECT count(id) from last_name")
-    length = cur.fetchone()[0]
-    _id = random.randrange(length)+1
-    cur.execute('SELECT lname from last_name WHERE id=?', (_id,))
-    lname = cur.fetchone()[0]
-
-    # first_name
-    cur.execute( "SELECT count(id) from first_name")
-    length = cur.fetchone()[0]
-    _id = random.randrange(length)+1
-    cur.execute('SELECT fname from first_name WHERE id=?', (_id,))
-    fname = cur.fetchone()[0]
+class DatabaseHandler:
+    def __init__(self, path, port=None, userId=None, passwd=None, pilote="sqlite3"):
+        """
+        path: path to the database
+        port: port used by the database
+        user: user login
+        passwd: password 
+        pilote: sqlite3, postgresql, mysql, mariadb
+        """
+        #connection to the base
+        self.conn = sql.connect('sql/honeypot.db')
+        #cursor
+        self.cur = self.conn.cursor()
     
-    # password
-    cur.execute( "SELECT count(id) from password")
-    length = cur.fetchone()[0]
-    _id = random.randrange(length)+1
-    cur.execute('SELECT passwd from password WHERE id=?', (_id,))
-    password = cur.fetchone()[0]
+    def __del__(self):
+        self.conn.close()
 
-    # mail
-    email = lname.lower()+"."+fname.lower()+'@unicaen.fr'
-    specialChar = {'é':'e','è':'e','ê':'e','ç':'c','à':'a','î':'i'}
-    for char in specialChar:
-        email = email.replace(char, specialChar[char])
+    def generatePersonInfo(self):
+        """
+        Generate person information (first name, last name, email, password)
+        return  (cn, email, password)
+        cn will be common name e.g: Jean Dupont
+        """
+        cur = self.cur
 
-    return lname+' '+fname,email,password
+        # last_name
+        cur.execute( "SELECT count(id) from last_name")
+        length = cur.fetchone()[0]
+        _id = random.randrange(length)+1
+        cur.execute('SELECT lname from last_name WHERE id=?', (_id,))
+        lname = cur.fetchone()[0]
 
-def savePeopleInfo(cn,email,password):
-    """
-    save people information in database
-    cn: common name (e.g: Jean Dupont)
-    email:
-    password:
-    """
-    try:
-        cur.execute("INSERT INTO people VALUES(?,?,?,datetime('now'))",(cn,email,password))
-    except sql.IntegrityError:
-        raise Exception(cn+" already exists")
+        # first_name
+        cur.execute( "SELECT count(id) from first_name")
+        length = cur.fetchone()[0]
+        _id = random.randrange(length)+1
+        cur.execute('SELECT fname from first_name WHERE id=?', (_id,))
+        fname = cur.fetchone()[0]
+        
+        # password
+        cur.execute( "SELECT count(id) from password")
+        length = cur.fetchone()[0]
+        _id = random.randrange(length)+1
+        cur.execute('SELECT passwd from password WHERE id=?', (_id,))
+        password = cur.fetchone()[0]
 
-    conn.commit()
+        # mail
+        email = lname.lower()+"."+fname.lower()+'@unicaen.fr'
+        specialChar = {'é':'e','è':'e','ê':'e','ç':'c','à':'a','î':'i'}
+        for char in specialChar:
+            email = email.replace(char, specialChar[char])
 
-def saveForm(url, form):
-    """
-    Save form in database
-    { 
-        form:{
-            'action':'www.test.fr/form.php',
-            'method':'post'
-        },
-        element:{
-            'firstname':'Jean',
-            'lastname':'Dupont',
-            'email':'jean.dupont@unicaen.fr',
-            'passwd':'123456'
+        return lname,fname,email,password
+
+    def savePersonInfo(self,fname, lname, email,password):
+        """
+        save Person information in database
+        cn: common name (e.g: Jean Dupont)
+        email:
+        password:
+        """
+        cur = self.cur
+        conn = self.conn
+        cn = fname+' '+lname
+        try:
+            cur.execute("INSERT INTO person VALUES(?,?,?,?,?,datetime('now'))",
+                    (cn,
+                        fname,
+                        lname,
+                        email,
+                        password))
+        except sql.IntegrityError:
+            raise Exception(cn+" already exists")
+
+        conn.commit()
+
+    def deletePersonInfo(self, fname, lname):
+        """
+        Delete a person from database
+        fname: first name
+        lname: last naem
+        """
+        cur = self.cur
+        conn = self.conn
+
+        cn = fname+' '+lname
+        try:
+            cur.execute("DELETE FROM person WHERE cn=?",(cn,))
+        except:
+            raise Exception(cn+"can not be delete")
+        conn.commit()
+
+    def saveForm(self,url, form):
+        """
+        Save form in database
+        e.g:
+        { 
+            form:{
+                'action':'www.test.fr/form.php',
+                'method':'post'
+            },
+            element:{
+                'firstname':'Jean',
+                'lastname':'Dupont',
+                'email':'jean.dupont@unicaen.fr',
+                'passwd':'123456'
+            }
         }
-    }
-    """
-    try:
-        cur.execute("INSERT INTO form(url,form, modified) VALUES(?,?,datetime('now'))",
-                (url,str(form)))
-    except :
-        pass
+        """
+        cur = self.cur
+        conn = self.conn
+        try:
+            cur.execute("INSERT INTO form(url,form, modified) VALUES(?,?,datetime('now'))",
+                    (url,str(form)))
+        except :
+            pass

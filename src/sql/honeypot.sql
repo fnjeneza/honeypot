@@ -27,15 +27,16 @@ INSERT INTO "password" VALUES(1,'123456');
 INSERT INTO "password" VALUES(2,'p@sswd');
 INSERT INTO "password" VALUES(3,'qwerty');
 INSERT INTO "password" VALUES(4,'azerty');
-CREATE TABLE people(
+CREATE TABLE person(
 	cn text primary key,
+	fname text not null,
+	lname text not null,
 	email text not null,
 	passwd text not null, 
-	modified date 
-);
-INSERT INTO "people" VALUES('Pierre Richard','pr@unicaen.fr','123456',NULL);
-INSERT INTO "people" VALUES('lionel Messi','lm@hello.fr','123456','2015-12-02 14:04:58');
-INSERT INTO "people" VALUES('Pierre Richards','pr@unicaen.fr','123456','2015-12-02 14:06:15');
+	modified date);
+INSERT INTO "person" VALUES('hello world','hello','world','hello.world@test.fr','azerty','2015-12-09 12:29:43');
+INSERT INTO "person" VALUES('hello sworld','hello','sworld','hello.world@test.fr','azerty','2015-12-09 12:32:56');
+INSERT INTO "person" VALUES('hello sworldx','hello','sworldx','hello.world@test.fr','azerty','2015-12-09 12:33:06');
 DELETE FROM sqlite_sequence;
 INSERT INTO "sqlite_sequence" VALUES('last_name',6);
 INSERT INTO "sqlite_sequence" VALUES('first_name',5);

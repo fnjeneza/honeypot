@@ -35,5 +35,29 @@ Ni les inputs de type reset
 gestion de action dans le formaulaire, lorsque action contient un chemin relatif
 
 
-Faut-il avant d'envoyer le formalaire faire une requete pour récupérer
+Faut-il avant d'envoyer le formulaire faire une requete pour récupérer
 le cookie??? et le lien de action???
+
+
+Utiliser sqlalchemy pour la presistance de données
+
+Scheduler:
+retourne la liste de heures ouvrés --Date+Heure-- par jour
+les commandes seront executés à ces dates là.
+Si la liste est vide une nouvelle liste est regénérée.
+
+Si la queue des tâches est vide la liste n'est plus checké.
+Le programme se reveille lorsqu'une nouvelle tâche est ajoutée dans la queue.
+Utilisation de message queuing.
+
+
+Dans les logs ajoutés sched_execution.
+
+A chaque démarrage le programme lit les logs cherche la deriière envoie de données
+si dans la base il y a une donnée non processée. Il la lance alors pour execution
+
+Comparaison de date d'envoie dans la base sql
+
++ date de naissance
++ adresse
+
