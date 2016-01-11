@@ -61,3 +61,6 @@ Comparaison de date d'envoie dans la base sql
 + date de naissance
 + adresse
 
+au démarrage vérifier dans la base de données des URL si tous ls URL ou
+tâches en attente ont été traité.
+

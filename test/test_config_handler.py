@@ -27,4 +27,12 @@ def test_retrieve_input_attr():
     "service=https%3A%2F%2Fwebmail.unicaen.fr%3A443%2Fpublic"
     "%2Fpreauth-unicaen-fr.jsp"))
     print(attr)
-    assert  attr==""
+    assert  not attr==""
+
+def test_work_hour():
+    import time
+    from src.scheduler import work_hour
+    ntime = time.time()
+    schedule = work_hour()
+    #schedule = schedule.timestamp()
+    assert schedule > ntime
