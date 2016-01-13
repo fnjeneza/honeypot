@@ -36,3 +36,32 @@ def test_work_hour():
     schedule = work_hour()
     #schedule = schedule.timestamp()
     assert schedule > ntime
+
+from src.ldap import LDAP
+@pytest.fixture()
+def init_ldap():
+    baseObject = "ou=people,dc=honeypot,dc=com"
+    user="cn=admin,dc=honeypot,dc=com"
+    password = "ubuntu"
+    host = "10.0.3.132"
+    return LDAP(user,password,baseObject,host)
+
+
+def test_ldap_exists(init_ldap ):
+    ldap = init_ldap
+    baseObject = "ou=people,dc=honeypot,dc=com"
+    assert ldap.exists(baseObject, "dupont")
+
+def test_ldap_add(init_ldap):
+    ldap = init_ldap
+    dn = "uid=med,ou=people,dc=honeypot,dc=com"
+    attr = {'uid':'med',
+            'cn':'med test',
+            'sn':'test'}
+    assert ldap.add(dn,attr)==True
+
+def test_ldap_delete(init_ldap):
+    ldap = init_ldap
+    dn = "uid=med,ou=people,dc=honeypot,dc=com"
+    assert ldap.delete(dn)==True
+

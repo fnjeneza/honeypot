@@ -64,3 +64,16 @@ Comparaison de date d'envoie dans la base sql
 au démarrage vérifier dans la base de données des URL si tous ls URL ou
 tâches en attente ont été traité.
 
+Attention: La recherche dans le LDAP se fait grace au nom+prénom . 
+Ajouter la baseObject de recherche dans le fichier de config
+
+Rendre le plus générique que possible les éléments de search
+
+user
+password
+host
+port
+search:
+	baseObject
+	objectclass
+	attributes

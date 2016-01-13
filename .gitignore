@@ -3,3 +3,8 @@ leboulleux/
 test/__pycache__
 __pycache__
 *.swp
+/bin
+/lib
+/include
+.cache
+pip*
