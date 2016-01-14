@@ -1,0 +1,6 @@
+dn: cn=Jean Dupont,ou=honeypot user,dc=honeypot,dc=com
+objectClass: inetOrgPerson
+cn: Jean Dupont
+sn: Dupont
+mail: jean.dupont@unicaen.fr
+userPassword: jeandupont

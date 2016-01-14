@@ -1,0 +1,4 @@
+dn: ou=honeypt user,dc=honeypot,dc=com
+objectClass: organizationalUnit
+ou: honeypot user
+

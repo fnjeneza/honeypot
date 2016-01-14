@@ -77,3 +77,7 @@ search:
 	baseObject
 	objectclass
 	attributes
+
+Il faudra créer au préalable le DIT
+
+Vérifier à 'initialisation l'existence des branche dans le DIT
