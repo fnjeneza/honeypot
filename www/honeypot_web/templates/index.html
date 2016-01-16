@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Honeypot</title>
+	</head>
+	<body>
+		<form action='.' method='POST' autocomplete='off'>
+			{% csrf_token %}
+			URL:<input type='text' name='url_spammer' value=''><br>
+			<input type='submit' value='Soumettre'>
+		</form>
+		<ul>
+			{% if last_urls %}
+			Derniers URL soumis:<br>
+			{% for url in last_urls %}
+				<li>{{url}}</li>
+				{%endfor%}
+				{%endif%}
+		</ul>
+	</body>
+</html>
