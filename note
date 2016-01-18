@@ -81,3 +81,7 @@ search:
 Il faudra créer au préalable le DIT
 
 Vérifier à 'initialisation l'existence des branche dans le DIT
+
+Afin de garder l'application simpliste, l'utilisation d'un service de
+message\foot{Message queuing service ou Message broker} a été abandonnée. Elle nécessiterait la
+mise en place d'un serveur MQ.
