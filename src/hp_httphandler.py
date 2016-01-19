@@ -62,10 +62,12 @@ def retrieve_input_attr(url):
     @param html: html syntax
     @return inputs: map of <input, type, name, value>
     """
+    # retrieve the url content
     page = urlopen(url)
     
     content_type = page.getheader('content-type')
     
+    #check if it is a html page
     if not content_type.find("text/html")>=0:
         raise Exception('Not an html page')
     
@@ -78,6 +80,7 @@ def retrieve_input_attr(url):
     hp = _HPHTMLParser()
     url_content = page.read()
 
+    # if encoding is given
     if charset!='':
         text = url_content.decode(charset)
     else:
@@ -96,7 +99,7 @@ def submit_form(url, params, userAgent=None):
     """
 
     u = urlparse(url)
-    scheme = u.scheme # protocol http or https
+    scheme = u.scheme # http or https
     host = u.hostname
     port = None
     if u.port is not None:
