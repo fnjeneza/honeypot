@@ -13,21 +13,19 @@ def work_hour():
     14:00 - 17:00, mean is 15:30
     sigma= 1h
     """
-
-    # current date and time
-    now = datetime.datetime.today()
-    
     #date planned
-    date_planned = now
+    date_planned = datetime.datetime.today()
 
-    # 5:0 PM
-    five_pm = date_planned.replace(hour=17,minute=00,second=00)
+    # 4:50 PM
+    five_pm = datetime.datetime.today().replace(hour=16,minute=50,second=00)
+    # current date
+    now = datetime.datetime.today()
     # time left, in seconds, before 5:0 PM
-    time_left = (five_pm-date_planned).total_seconds()
+    time_left = (five_pm-now).total_seconds()
 
-    #if less than 2 min left before 5:00 PM
+    #if less than 10 min left before 5:00 PM
     #report to the day after
-    if time_left < 120:
+    if time_left < 0:
         date_planned = date_planned+datetime.timedelta(days=1)
 
     # if the planned/current day is weekend
@@ -37,55 +35,39 @@ def work_hour():
         date_planned = date_planned+datetime.timedelta(
                 days=7-weekday)
 
-    # if planned at current date
-    if date_planned == now:
-        hour_planned = date_planned.hour
-        minute_planned = date_planned.minute
-        if hour_planned < 9:
-            hour_planned, minute_planned = _schedule('am')
 
-        if 12 <hour_planned <14:
-            hour_planned, minute_planned = _schedule('pm')
-
-        date_planned = date_planned.replace(hour=hour_planned,
-            minute=minute_planned)
-    # if planned another day
-    else:
-        hour_planned, minute_planned = _schedule()
-
-        date_planned = date_planned.replace(hour=hour_planned,
-            minute=minute_planned)
+    while True:
+        hour,minute = _schedule()
+        # schedule date
+        sched = date_planned.replace(hour=hour,minute=minute)
+        # timedelta
+        delta = sched-now
+        if (delta.days>0
+                or (delta.days==0 and delta.seconds>0)):
+            date_planned = sched
+            return date_planned
 
     # date_planned in seconds
     return date_planned.timestamp()
 
 
-def _schedule(choice=None):
+def _schedule():
     """
     generate a time between 9:00 - 12:00 or 14:00 - 17:00
     choice is "am" or "pm", default is None
     return an tuple (hour, minute)
     """
-    if choice is None:
-        choice = random.choice(['am','pm'])
-    
-    hour = 0
-    minute = 0
-    if choice=='am':
-        #gauss distribution between 9 and 12
-        while not 9 <hour<12:
-            # mean 10:30,=> 36030 in seconds
-            # sigma is 1 hour,=> 3600 in seconds
-            rtime  = int(random.gauss(36030,3600))
-            hour = int(rtime/3600)
-            minute = (rtime%3600)%60
-    else:
-        # gauss distribution between 14 and 17
-        while not 14<hour<17:
-            # mean 15:30,=> 54030 in seconds
-            # sigma is 1 hour,=> 3600 in seconds
-            rtime  = int(random.gauss(54030,3600))
-            hour = int(rtime/3600)
-            minute = (rtime%3600)%60
+    while True:
+        # random choice mean 10:30 => 36030 in seconds
+        # or mean 15:30 => 54030 in seconds
+        mean = random.choice([36030,54030])
+        # gaussian random
+        # sigma 1h => 3600 in seconds
+        sigma = 3600
+        rtime = int(random.gauss(mean,sigma))
+        hour = int(rtime/3600)
+        minute = int(rtime%3600)%60
 
-    return hour, minute
+        if (9<=hour<12 or 14<=hour<17):
+            return hour,minute
+

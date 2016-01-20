@@ -37,6 +37,12 @@ CREATE TABLE person(
 INSERT INTO "person" VALUES('hello world','hello','world','hello.world@test.fr','azerty','2015-12-09 12:29:43');
 INSERT INTO "person" VALUES('hello sworld','hello','sworld','hello.world@test.fr','azerty','2015-12-09 12:32:56');
 INSERT INTO "person" VALUES('hello sworldx','hello','sworldx','hello.world@test.fr','azerty','2015-12-09 12:33:06');
+CREATE TABLE broker(
+id integer primary key,
+url text not null,
+insert_date date not null,
+schedule_date date default null,
+processed boolean not null);
 DELETE FROM sqlite_sequence;
 INSERT INTO "sqlite_sequence" VALUES('last_name',6);
 INSERT INTO "sqlite_sequence" VALUES('first_name',5);

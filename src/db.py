@@ -15,12 +15,29 @@ class DatabaseHandler:
         pilote: sqlite3, postgresql, mysql, mariadb
         """
         #connection to the base
-        self.conn = sql.connect('sql/honeypot.db')
+        self.conn = sql.connect(path)
         #cursor
         self.cur = self.conn.cursor()
     
     def __del__(self):
         self.conn.close()
+
+    def newUrl(self):
+        """
+        Checks if there is a new url added.
+        return list of urls
+        """
+        self.cur.execute("""SELECT url FROM broker WHERE
+                schedule_date is NULL""")
+        return [url[0] for url in self.cur.fetchall()]
+
+    def updateScheduleDate(self,url,schedule):
+        """
+        update the schedule date
+        """
+        self.cur.execute("UPDATE broker SET schedule_date=? WHERE url=?",
+                (schedule,url,))
+        self.conn.commit()
 
     def generatePersonInfo(self):
         """
@@ -64,7 +81,7 @@ class DatabaseHandler:
         save Person information in database
         cn: common name (e.g: Jean Dupont)
         email:
-        password:
+        password:2015-12-09 12:29:43
         """
         cur = self.cur
         conn = self.conn
@@ -94,7 +111,7 @@ class DatabaseHandler:
         try:
             cur.execute("DELETE FROM person WHERE cn=?",(cn,))
         except:
-            raise Exception(cn+"can not be delete")
+            raise Exception(cn+"can not be deleted")
         conn.commit()
 
     def saveForm(self,url, form):
