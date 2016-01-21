@@ -3,7 +3,9 @@
 __author__ = 'fnjeneza'
 
 import sqlite3 as sql
-import random
+from random import randrange, gauss
+from datetime import date, datetime
+
 
 class DatabaseHandler:
     def __init__(self, path, port=None, userId=None, passwd=None, pilote="sqlite3"):
@@ -50,21 +52,21 @@ class DatabaseHandler:
         # last_name
         cur.execute( "SELECT count(id) from last_name")
         length = cur.fetchone()[0]
-        _id = random.randrange(length)+1
+        _id = randrange(length)+1
         cur.execute('SELECT lname from last_name WHERE id=?', (_id,))
         lname = cur.fetchone()[0]
 
         # first_name
         cur.execute( "SELECT count(id) from first_name")
         length = cur.fetchone()[0]
-        _id = random.randrange(length)+1
-        cur.execute('SELECT fname from first_name WHERE id=?', (_id,))
-        fname = cur.fetchone()[0]
+        _id = randrange(length)+1
+        cur.execute('SELECT fname, gender from first_name WHERE id=?', (_id,))
+        fname, gender = cur.fetchone()
         
         # password
         cur.execute( "SELECT count(id) from password")
         length = cur.fetchone()[0]
-        _id = random.randrange(length)+1
+        _id = randrange(length)+1
         cur.execute('SELECT passwd from password WHERE id=?', (_id,))
         password = cur.fetchone()[0]
 
@@ -74,7 +76,25 @@ class DatabaseHandler:
         for char in specialChar:
             email = email.replace(char, specialChar[char])
 
-        return lname,fname,email,password
+        # birth date
+        # gauss distribution
+        # mean = 45*365*24*60*60  //45 years in seconds
+        # sigma = 10*365*24*60*60 //10 years in seconds
+        mean = 1419120000
+        sigma = 315360000
+        years = gauss(mean, sigma)
+        # current timestamp in second
+        now = datetime.now().timestamp()
+        # compute birth
+        birth = date.fromtimestamp(now-years).isoformat()
+
+        return {'NAM':lname,
+                'NCK':fname,
+                'USR':lname+'.'+fname,
+                'EML':email,
+                'PWD':password,
+                'GEN':gender,
+                'BIR':birth}
 
     def savePersonInfo(self,fname, lname, email,password):
         """

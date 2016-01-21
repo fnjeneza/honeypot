@@ -3,17 +3,14 @@
 __author__ = "fnjeneza"
 
 import pytest
-from src.configHPHandler import load_configuration
 from src.hp_httphandler import submit_form
 
-def test_load_configuration():
-    out = load_configuration()
-    assert out == {'test':'test'}
+@pytest.fixture()
+def init_db():
+    from src.db import DatabaseHandler
+    db = DatabaseHandler('../src/sql/testhoneypot.db')
+    return db
 
-def test_load_configuration_arg():
-    out = load_configuration("files/main.config")
-    assert out == {'test':'test'}
-    
 def test_submit_form():
     url = 'http://192.168.1.80:8000/hello'
     params={'email':'test@test.com',
@@ -21,9 +18,15 @@ def test_submit_form():
     out = submit_form(url,params)
     assert out == 501
 
-from src.hp_httphandler import retrieve_input_attr
-def test_retrieve_input_attr():
-    attr = retrieve_input_attr(("https://cas.unicaen.fr/login?"
+def test_generate_person_info(init_db):
+    db = init_db
+    person = db.generatePersonInfo()
+    for v in person:
+        assert person[v]!=''
+
+from src.hp_httphandler import retrieve_form_fields
+def test_retrieve_form_fields():
+    attr = retrieve_form_fields(("https://cas.unicaen.fr/login?"
     "service=https%3A%2F%2Fwebmail.unicaen.fr%3A443%2Fpublic"
     "%2Fpreauth-unicaen-fr.jsp"))
     print(attr)
