@@ -12,13 +12,14 @@ INSERT INTO "last_name" VALUES(5,'Simon');
 INSERT INTO "last_name" VALUES(6,'Richard');
 CREATE TABLE first_name(
 	id	integer primary key autoincrement,
-	fname	text not null
+	fname	text not null,
+	gender	text not null
 );
-INSERT INTO "first_name" VALUES(1,'Elisabeth');
-INSERT INTO "first_name" VALUES(2,'Marie');
-INSERT INTO "first_name" VALUES(3,'Dupont');
-INSERT INTO "first_name" VALUES(4,'valérie');
-INSERT INTO "first_name" VALUES(5,'Yvan');
+INSERT INTO "first_name" VALUES(1,'Elisabeth','F');
+INSERT INTO "first_name" VALUES(2,'Marie','F');
+INSERT INTO "first_name" VALUES(3,'Dupont','M');
+INSERT INTO "first_name" VALUES(4,'valérie','F');
+INSERT INTO "first_name" VALUES(5,'Yvan','M');
 CREATE TABLE password(
 	id	integer primary key autoincrement,
 	passwd	text not null
@@ -32,11 +33,11 @@ CREATE TABLE person(
 	fname text not null,
 	lname text not null,
 	email text not null,
-	passwd text not null, 
+	passwd text not null,
+	birth date not null,
+	gender text not null,
 	modified date);
-INSERT INTO "person" VALUES('hello world','hello','world','hello.world@test.fr','azerty','2015-12-09 12:29:43');
-INSERT INTO "person" VALUES('hello sworld','hello','sworld','hello.world@test.fr','azerty','2015-12-09 12:32:56');
-INSERT INTO "person" VALUES('hello sworldx','hello','sworldx','hello.world@test.fr','azerty','2015-12-09 12:33:06');
+INSERT INTO "person" VALUES('hello world','hello','world','hello.world@test.fr','azerty','2015-11-25','M','2015-12-09 12:29:43');
 CREATE TABLE broker(
 id integer primary key,
 url text not null,
