@@ -1,0 +1,97 @@
+# Fichier élaboré par Leboulleux Arnaud (20804070)
+#
+# La base de connaissance contient tous les mots reconnaissable dans le typage de formulaire.
+# Chaque mot est taggué par sa catégorie (mot: CAT). Soyez libre d'en ajouter même dans une catégorie nouvelle.
+user: USR
+username: USR
+utilisateur: USR
+usr: USR
+id: USR
+
+name: NAM
+nom: NAM
+familyname: NAM
+surname: NAM
+lastname: NAM
+sname: NAM
+lname: NAM
+nomfamille: NAM
+nomdefamille: NAM
+
+prenom: NCK
+pnom: NCK
+firstname: NCK
+fname: NCK
+nickname: NCK
+nick: NCK
+nname: NCK
+
+age: AGE
+yearsold: AGE
+years: AGE
+yold: AGE
+datedenaissance: AGE
+datenaiss: AGE
+date: AGE
+birthday: AGE
+birth: AGE
+
+pass: PWD
+pwd: PWD
+passwd: PWD
+password: PWD
+passphrase: PWD
+motdepasse: PWD
+mdp: PWD
+passagain: PWD
+pwdagain: PWD
+passwdagain: PWD
+passwordagain: PWD
+passphraseagain: PWD
+motdepassebis: PWD
+mdpbis: PWD
+
+passhint: PWH
+pwdhint: PWH
+passwdhint: PWH
+passwordhint: PWH
+motdepasseindice: PWH
+mdpindice: PWH
+
+securityq: PWQ
+securityquestion: PWQ
+securityphrase: PWQ
+passwordquestion: PWQ
+secretquestion: PWQ
+questionsecurite: PWQ
+questionsec: PWQ
+qsecurite: PWQ
+questionsecret: PWQ
+secret: PWQ
+
+email: EML
+mail: EML
+mel: EML
+courriel: EML
+eaddress: EML
+emailaddress: EML
+emailadd: EML
+adresseemail: EML
+adressecourriel: EML
+emailagain: EML
+emailaddressagain: EML
+adresseemailbis: EML
+courrielbis: EML
+emailbis: EML
+courrielconfirmation: EML
+emailconfirmation: EML
+confirmationcourriel: EML
+confirmationemail: EML
+
+gender: GEN
+sex: GEN
+sexe: GEN
+malefemale: GEN
+hommefemme: GEN
+civilite: GEN
+civil: GEN

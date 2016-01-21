@@ -48,7 +48,7 @@ class _HPHTMLParser(HTMLParser):
             self.__is_form_opened = False
 
 
-def retrieve_input_attr(url):
+def retrieve_form_fields(url):
     """
     Retrieve list of input's attr inside a form
     
@@ -93,7 +93,7 @@ def retrieve_input_attr(url):
     
     return hp.get_input_attr()
 
-def submit_form(url, params, userAgent=None):
+def submit_form(action, params, method = 'POST', userAgent=None):
     """
     submit the form with completed input
     """
@@ -120,7 +120,7 @@ def submit_form(url, params, userAgent=None):
 
     data = urlencode(params)
 
-    req = conn.request('POST', path, data, header) #request
+    req = conn.request(method, path, data, header) #request
     resp = conn.getresponse() #response
     code = resp.getcode() # returned code
 
