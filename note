@@ -1,5 +1,5 @@
-Le premier fichier à être chargé et le fichier de configuration en cas 
-d'erreur les logs sont dans le dossier par défaut "/var/log/honeypot/"
+Le premier fichier à être chargé et le fichier de configuration. en cas 
+d'erreur, les logs sont dans le dossier par défaut "/var/log/honeypot/"
 
 S'assurer du droit d'écriture dans le fichier /var/log
 
@@ -15,9 +15,9 @@ respecter le FHS
 sinon donner le nom de l'environnement
 
 Idée: Pour (facilité)une bonne maintenance et évoution. Chaque module
-développer est indépendant des autres. Ainsi, des exceptions sont utilisés
+développé est indépendant des autres. Ainsi, des exceptions sont utilisés
 à la place des logs pour assurer cette indépendance. Ces exceptions seront
-toutesfois à la base de logs dans l'agregateur de finals.
+toutesfois à la base de logs dans l'agregateur finals.
 
 Le développement du module pour la récupération des champs
 se base sur du html4 et 5. Dans le html5 de nouveau champs ont été crée.
@@ -28,7 +28,7 @@ Ajouter un chemin absolue pour la recherche de config_file
 
 setcookie in post header
 
-Les inputs de types Checkbox non cochés ne sont as envoyé dans le 
+Les inputs de types Checkbox non cochés ne sont pas envoyé dans le 
 formulaire
 Ni les inputs de type reset
 
@@ -67,6 +67,9 @@ tâches en attente ont été traité.
 Attention: La recherche dans le LDAP se fait grace au nom+prénom . 
 Ajouter la baseObject de recherche dans le fichier de config
 
+Todo:
+ Vérifier si le DIT est organisé comme il faut ou si il existe
+
 Rendre le plus générique que possible les éléments de search
 
 user
@@ -81,3 +84,7 @@ search:
 Il faudra créer au préalable le DIT
 
 Vérifier à 'initialisation l'existence des branche dans le DIT
+
+Dans le main, il faut vérifier le site, si il est valide ou pas si il dispose de
+tous les champs dont on tient compte.
+
