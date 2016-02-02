@@ -2,7 +2,7 @@
 
 database:
     type: sqlite
-    uri: 127.0.0.1
+    uri: sql/honeypot.db
     user: test
     password: testpw
 
@@ -14,6 +14,9 @@ ldap:
     password: admin_ldap
     base_object: ou=fake user,dc=honeypot,dc=com
 
-log: /var/log/honeypot/ #where logs are saved
-
+broker_check_interval: 60 #seconds
+inspector_interval: 60
+log:
+    level: DEBUG 
+    file: loghoneypot.log #where logs are saved
 

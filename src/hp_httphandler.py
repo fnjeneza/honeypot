@@ -93,7 +93,7 @@ def retrieve_form_fields(url):
     
     return hp.get_input_attr()
 
-def submit_form(action, params, method = 'POST', userAgent=None):
+def submit_form(url, params, method = 'POST', userAgent=None):
     """
     submit the form with completed input
     """
@@ -125,3 +125,39 @@ def submit_form(action, params, method = 'POST', userAgent=None):
     code = resp.getcode() # returned code
 
     return code
+
+def handle_webspam(url, person, tags):
+    """
+    1. retrieve all fields of a form
+    2. feed all fields
+    3  send a response 
+
+    Args: 
+        url: url
+        person: information on a person
+        tag: normalized correspondence of fields
+
+    return: html code response
+    """
+    # retrieve fields
+    form = retrieve_form_fields(url)
+
+    action = form['form']['action']
+    inputs = form['inputs']
+    
+    #parameters
+    params={}
+
+    for _input in inputs:
+        field_name = _input['name']
+        try:
+            _tag = tags[field_name]
+            params[field_name] = person[_tag]
+        except KeyError:
+            params[field_name] = _input['value']
+
+    url = url+action
+    print(url)
+    code = submit_form(url, params)
+    return code
+
