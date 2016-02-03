@@ -16,7 +16,14 @@ ldap:
 
 broker_check_interval: 60 #seconds
 inspector_interval: 60
+
 log:
     level: DEBUG 
     file: loghoneypot.log #where logs are saved
+
+inspector:
+    logpath: files/log.test
+    filter: files/regex.filter
+    command: iptables
+    bantime: 3600
 
