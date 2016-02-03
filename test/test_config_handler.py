@@ -3,7 +3,9 @@
 __author__ = "fnjeneza"
 
 import pytest
+import datetime
 from src.hp_httphandler import submit_form
+from src.inspector import supervisor
 
 @pytest.fixture()
 def init_db():
@@ -68,3 +70,11 @@ def test_ldap_delete(init_ldap):
     dn = "uid=med,ou=people,dc=honeypot,dc=com"
     assert ldap.delete(dn)==True
 
+def test_supervisor():
+    journal = 'files/log.test'
+    with open('files/regex.filter') as reg:
+        regex = reg.read()
+    last_check = datetime.datetime(2015,1,1)
+    ips = supervisor(journal, regex, last_check)
+    tuple_ips = ('192.168.1.1','192.168.58.58')
+    assert ips==tuple_ips

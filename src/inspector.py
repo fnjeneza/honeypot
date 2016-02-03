@@ -81,7 +81,7 @@ def _ban_host(host):
     """
     add an iptables rule to ban a host
     """
-    command  = "touch OO1.test"
+    command  = "touch /tmp/OO1.test"
     #TODO log execution code
     returncode = subprocess.call(command.split())
     print("returncode for %s" %command)
