@@ -5,6 +5,7 @@ database:
     uri: sql/honeypot.db
     user: test
     password: testpw
+    check_interval: 60 #seconds broker interval
 
 ldap:
     uri: 127.0.0.1
@@ -13,17 +14,17 @@ ldap:
     user: cn=admin,dc=honeypot,dc=com
     password: admin_ldap
     base_object: ou=fake user,dc=honeypot,dc=com
-
-broker_check_interval: 60 #seconds
-inspector_interval: 60
+    check_interval: 60 #seconds broker interval
+#inspector_interval: 60
 
 log:
     level: DEBUG 
     file: loghoneypot.log #where logs are saved
 
 inspector:
-    logpath: files/log.test
-    filter: files/regex.filter
+    logfile: files/log.test
+    regex: files/regex.filter
     command: iptables
-    bantime: 3600
+    bantime: 3600 # not implemented
+    check_interval: 60
 

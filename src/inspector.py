@@ -14,7 +14,6 @@ def supervisor(journal, regex, last_check):
     returns:
         tuple of blocked hosts
     """
-    
     with open(journal) as hp:
         logs = hp.read()
     
@@ -40,12 +39,11 @@ def supervisor(journal, regex, last_check):
             month = _month_to_int(month)
             handled = _is_line_handled(last_check, year, 
                 month, day, hour, minute)
-            print(handled)
             if not handled:
                 _ban_host(host)
                 hosts_blocked.append(host)
     
-    return tuple(hosts_blocked)            
+    return tuple(hosts_blocked)
     
 def _get_value(result, key):
     """
