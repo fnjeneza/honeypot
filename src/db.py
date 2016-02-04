@@ -158,3 +158,25 @@ class DatabaseHandler:
                     (url,str(form)))
         except :
             pass
+        conn.commit()
+    
+    def update_last_check(self,check_time):
+        """
+        update last_check table
+        """
+        cur = self.cur
+        conn = self.conn
+        
+        cur.execute("UPDATE last_check SET last_check=?",(check_time,))
+        
+        conn.commit()
+
+    def last_check(self):
+        """
+        return last check date as timestamp
+        """
+        cur = self.cur
+        cur.execute('SELECT last_check FROM last_check')
+        lc = cur.fetchone()[0]
+        return lc
+
