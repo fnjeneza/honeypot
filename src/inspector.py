@@ -1,6 +1,10 @@
 import re
 import datetime
 import subprocess
+from honeypot_utils import get_logger
+
+# logger
+logger = get_logger(__name__)
 
 def supervisor(journal, regex, last_check):
     """
@@ -17,14 +21,9 @@ def supervisor(journal, regex, last_check):
     with open(journal) as hp:
         logs = hp.read()
     
-    #TODO debug
-    print(regex)
+    logger.debug(regex)
     pattern = re.compile(regex)
-    #TODO debug
-    print(pattern)
     lines = pattern.finditer(logs)
-    #TODO debug
-    print(lines)
     #list of hosts blocked
     hosts_blocked = []
     if lines:
@@ -80,10 +79,8 @@ def _ban_host(host):
     add an iptables rule to ban a host
     """
     command  = "touch /tmp/OO1.test"
-    #TODO log execution code
     returncode = subprocess.call(command.split())
-    print("returncode for %s" %command)
-    #Todo log return code
+    logger.info("'%s' executed, exit code %s" %(command, returncode))
 
 def _unban_host(host):
     """
