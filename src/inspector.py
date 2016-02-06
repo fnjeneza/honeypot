@@ -34,7 +34,7 @@ def supervisor(journal, regex, last_check):
             hour = int(_get_value(line,'hour'))
             minute = int(_get_value(line,'minute'))
             host = _get_value(line,'host')
-            #TODO debug
+            logger.debug('%s found in inspected file' %host)
             month = _month_to_int(month)
             handled = _is_line_handled(last_check, year, 
                 month, day, hour, minute)
@@ -64,15 +64,23 @@ def _get_value(result, key):
 def _is_line_handled(last_check, year, month, day, hour, minute):
     """
     Check if log has been handled according to the date
-    """  
+    """
+    #current date
+    now  = datetime.datetime.now()
+    # if year is not in the log line, add current yean
     if year is None:
-        year = datetime.datetime.now().year
+        year = now.year
         
     log_date = datetime.datetime(year, month, day, hour, minute)
+    # log_date can not be great than current date
+    # so, year has to be decreased
+    if log_date > now:
+        log_date = log_date.replace(year=log_date.year-1)
+
+    logger.debug('last_check %s, log_date %s' %(last_check, log_date))
     # difference between last check and log date
     delta = log_date - last_check 
-    return True if (delta.days < 0) else False
-    
+    return log_date > last_check
     
 def _ban_host(host):
     """
