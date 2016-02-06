@@ -29,6 +29,7 @@ class DatabaseHandler:
         Checks if there is a new url added.
         return list of urls
         """
+        logger.debug("check for new urls in the broker")
         self.cur.execute("""SELECT url FROM broker WHERE
                 schedule_date is NULL""")
         return [url[0] for url in self.cur.fetchall()]
@@ -63,6 +64,10 @@ class DatabaseHandler:
         cur.execute('SELECT fname, gender from first_name WHERE id=?', (_id,))
         fname, gender = cur.fetchone()
         
+        #common name
+        cn = fname[0]+lname
+        cn = cn.lower()
+
         # password
         cur.execute( "SELECT count(id) from password")
         length = cur.fetchone()[0]
@@ -90,13 +95,13 @@ class DatabaseHandler:
 
         return {'NAM':lname,
                 'NCK':fname,
-                'USR':lname+'.'+fname,
+                'USR':cn,
                 'EML':email,
                 'PWD':password,
                 'GEN':gender,
                 'BIR':birth}
 
-    def savePersonInfo(self,fname, lname, email,password):
+    def savePersonInfo(self, url, fname, lname, cn, email,password, gender, birth):
         """
         save Person information in database
         cn: common name (e.g: Jean Dupont)
@@ -105,14 +110,18 @@ class DatabaseHandler:
         """
         cur = self.cur
         conn = self.conn
-        cn = fname+' '+lname
+        cn = fname[0].lname
+        cn = cn.lower()
         try:
             cur.execute("INSERT INTO person VALUES(?,?,?,?,?,datetime('now'))",
                     (cn,
+                        url,
                         fname,
                         lname,
                         email,
-                        password))
+                        password,
+                        birth,
+                        gender))
         except sql.IntegrityError:
             msg = '%s already exists' % cn
             logger.error(msg)
