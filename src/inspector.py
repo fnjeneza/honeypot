@@ -34,11 +34,12 @@ def supervisor(journal, regex, last_check):
             hour = int(_get_value(line,'hour'))
             minute = int(_get_value(line,'minute'))
             host = _get_value(line,'host')
-            logger.debug('%s found in inspected file' %host)
+            logger.debug('%s found in log file' %host)
             month = _month_to_int(month)
             handled = _is_line_handled(last_check, year, 
                 month, day, hour, minute)
             if not handled:
+                logger.info('ip to ban %s' % host)
                 _ban_host(host)
                 hosts_blocked.append(host)
     
@@ -80,7 +81,7 @@ def _is_line_handled(last_check, year, month, day, hour, minute):
     logger.debug('last_check %s, log_date %s' %(last_check, log_date))
     # difference between last check and log date
     delta = log_date - last_check 
-    return log_date > last_check
+    return log_date < last_check
     
 def _ban_host(host):
     """
