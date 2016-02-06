@@ -5,6 +5,9 @@ __author__ = 'fnjeneza'
 import sqlite3 as sql
 from random import randrange, gauss
 from datetime import date, datetime
+from honeypot_utils import get_logger
+
+logger = get_logger(__name__)
 
 
 class DatabaseHandler:
@@ -21,9 +24,6 @@ class DatabaseHandler:
         #cursor
         self.cur = self.conn.cursor()
     
-    def __del__(self):
-        self.conn.close()
-
     def newUrl(self):
         """
         Checks if there is a new url added.
@@ -114,7 +114,9 @@ class DatabaseHandler:
                         email,
                         password))
         except sql.IntegrityError:
-            raise Exception(cn+" already exists")
+            msg = '%s already exists' % cn
+            logger.error(msg)
+            #raise Exception(msg)
 
         conn.commit()
 
@@ -131,7 +133,9 @@ class DatabaseHandler:
         try:
             cur.execute("DELETE FROM person WHERE cn=?",(cn,))
         except:
-            raise Exception(cn+"can not be deleted")
+            msg = '%s can not be deleted' % cn
+            logger.error(msg)
+            #raise Exception(msg)
         conn.commit()
 
     def saveForm(self,url, form):
@@ -156,8 +160,8 @@ class DatabaseHandler:
         try:
             cur.execute("INSERT INTO form(url,form, modified) VALUES(?,?,datetime('now'))",
                     (url,str(form)))
-        except :
-            pass
+        except:
+            logger.error('saving form error')
         conn.commit()
     
     def update_last_check(self,check_time):
@@ -166,9 +170,7 @@ class DatabaseHandler:
         """
         cur = self.cur
         conn = self.conn
-        
         cur.execute("UPDATE last_check SET last_check=?",(check_time,))
-        
         conn.commit()
 
     def last_check(self):
@@ -180,3 +182,28 @@ class DatabaseHandler:
         lc = cur.fetchone()[0]
         return lc
 
+    def add_ban_address(self,adrs, current):
+        """
+        add banned adress to db
+
+        Arguments:
+            adrs: adresse list or tuple
+            current: now timestamp
+        """
+        #if adrs is empty
+        if not adrs:
+            return
+        cur = self.cur
+        conn = self.conn
+        for adr in adrs:
+            cur.execute('INSERT INTO ban_address VALUES(?,?)',(adr, current))
+        conn.commit()
+
+    def ban_address(self):
+        """
+        return all banned address
+        """
+        cur = self.cur
+        cur.execute('SELECT ip from ban_address')
+        adrs = cur.fetchall()
+        return [adr[0] for adr in adrs]
