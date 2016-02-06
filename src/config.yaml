@@ -19,7 +19,7 @@ ldap:
 
 log:
     level: DEBUG 
-    file: loghoneypot.log #where logs are saved
+    file: files/loghoneypot.log #where logs are saved
 
 inspector:
     logfile: files/log.test
