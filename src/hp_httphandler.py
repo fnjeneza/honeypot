@@ -6,6 +6,10 @@ from urllib.request import urlopen
 from html.parser import HTMLParser
 from http.client import HTTPConnection, HTTPSConnection
 from urllib.parse import urlparse, urlencode
+from honeypot_utils import get_logger
+
+logger = get_logger(__name__)
+
 
 class _HPHTMLParser(HTMLParser):
     """
@@ -76,18 +80,25 @@ def retrieve_form_fields(url):
         charset = content_type.split(";")[1]
         index = charset.find("=")+1
         charset = charset[index:]
+        logger.debug("charset %s" % charset)
 
     hp = _HPHTMLParser()
     url_content = page.read()
 
     # if encoding is given
     if charset!='':
-        text = url_content.decode(charset)
+        try:
+            text = url_content.decode(charset)
+        except UnicodeDecodeError:
+            try:
+                text = url_content.decode()
+            except UnicodeDecodeError:
+                text = url_content.decode('latin-1')
     else:
         try:
             text = url_content.decode() # utf-8
         except UnicodeDecodeError:
-            text = bytes_text.decode('latin-1')
+            text = url_content.decode('latin-1')
 
     hp.feed(text)
     
@@ -149,15 +160,18 @@ def handle_webspam(url, person, tags):
     params={}
 
     for _input in inputs:
-        field_name = _input['name']
+        field_name = _input['name'].lower()
         try:
             _tag = tags[field_name]
             params[field_name] = person[_tag]
         except KeyError:
             params[field_name] = _input['value']
 
-    url = url+action
-    print(url)
+    if action.find('http')<0:
+        u = urlparse(url)
+        url = u.scheme+"://"+u.netloc+"/"+action
+    
+    logger.debug("url %s" %url)
     code = submit_form(url, params)
     return code
 
