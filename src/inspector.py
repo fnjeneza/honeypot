@@ -83,11 +83,15 @@ def _is_line_handled(last_check, year, month, day, hour, minute):
     delta = log_date - last_check 
     return log_date < last_check
     
-def _ban_host(host):
+def _ban_host(host, cmd):
     """
     add an iptables rule to ban a host
+
+    Attributes:
+        host: the hostto ban
+        cmd: command to execute with <host> inside
     """
-    command  = "touch /tmp/OO1.test"
+    command  = cmd.replace('<host>', host)
     returncode = subprocess.call(command.split())
     logger.info("'%s' executed, exit code %s" %(command, returncode))
 
