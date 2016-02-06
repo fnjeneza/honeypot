@@ -6,21 +6,26 @@ import yaml
 import logging
 from logging.handlers import RotatingFileHandler
 
-def _init_logger(log_file,log_level='debug'):
+def _init_logger(log_file='/tmp/honeypot.log',log_level='debug'):
     logger = logging.getLogger('honeypot')
     logger.setLevel(logging.DEBUG)
     formatter = logging.Formatter(
             '%(asctime)s %(module)s[%(process)d] : '
             +'%(levelname)s : %(message)s')
 
+
     file_handler = RotatingFileHandler(log_file)
     file_handler.setLevel(logging.DEBUG)
     file_handler.setFormatter(formatter)
+    # add  handler
     logger.addHandler(file_handler)
     
     # stream logger
     sh = logging.StreamHandler()
+    sh_fmt = logging.Formatter('line %(lineno)s -- %(funcName)s -- %(message)s')
     sh.setLevel(logging.DEBUG)
+    sh.setFormatter(sh_fmt)
+    # add handler 
     logger.addHandler(sh)
     #return logger
 
@@ -53,6 +58,7 @@ class Config():
         self.inspector_interval = configuration['inspector']['check_interval']
 
         _init_logger(self.log_file, self.log_level)
+
         #if (LOG_FILE and LOG_LEVEL):
         #    logger()
 
