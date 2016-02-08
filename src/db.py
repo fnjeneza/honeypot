@@ -101,7 +101,7 @@ class DatabaseHandler:
                 'GEN':gender,
                 'BIR':birth}
 
-    def savePersonInfo(self, url, fname, lname, cn, email,password, gender, birth):
+    def savePersonInfo(self, url, person):
         """
         save Person information in database
         cn: common name (e.g: Jean Dupont)
@@ -110,18 +110,18 @@ class DatabaseHandler:
         """
         cur = self.cur
         conn = self.conn
-        cn = fname[0].lname
+        cn = fname[0]+lname
         cn = cn.lower()
         try:
-            cur.execute("INSERT INTO person VALUES(?,?,?,?,?,datetime('now'))",
-                    (cn,
+            cur.execute("INSERT INTO person VALUES(?,?,?,?,?,?,?,?,datetime('now'))",
+                    (person['USR'],
                         url,
-                        fname,
-                        lname,
-                        email,
-                        password,
-                        birth,
-                        gender))
+                        person['NCK'],
+                        person['NAM'],
+                        person['EML'],
+                        person['PWD'],
+                        person['BIR'],
+                        person['GEN']))
         except sql.IntegrityError:
             msg = '%s already exists' % cn
             logger.error(msg)
