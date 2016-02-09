@@ -16,7 +16,7 @@ from honeypot_utils import  get_logger, Config
 from concurrent import futures
 import datetime
 from inspector import supervisor
-
+from ldap import LDAP
 
 logger = get_logger(__name__)
 
@@ -39,19 +39,39 @@ class _Honeypotd:
         person = dbh.generatePersonInfo()
         logger.debug(person)
         logger.info('processing webspam form from %s' %(url,))
+        # handle the webspam
         code = handle_webspam(url, person, tags)
         logger.info("%s - code returned %d" %(url,code,))
         if code not in [200,302,301]:
             logger.error("%s not handled" %(url,))
 
         else :
-            # TODO finish savePersonInfo
             logger.info("saving generated info ")
-            # savePersonInfo()
-            pass
+            # save person info in db
+            dbh.savePersonInfo(url,person)
+
+            # connect to LDAP
+            logger.debug('Connection to LDAP')
+            user = self.config.ldap_user
+            password = self.config.ldap_password
+            baseObject = self.config.ldap_baseObject
+            host = self.config.ldap_host
+             #       self.config.ldap_port)
+            hp_ldap = LDAP(user, password, baseObject, host)
+            cn = "%s %s" % (person['NCK'], person['NAM'])
+            dn = 'cn='+cn+','+self.config.ldap_baseObject
+            logger.debug("cn=%s" % cn)
+            sn = person['NAM']
+            mail = person['EML']
+            userPassword = person['PWD']
+            attrs = {'cn':cn, 'sn':sn, 'mail':mail,'userPassword':userPassword}
+            logger.debug(attrs)
+            # add info to LDAP
+            added = hp_ldap.add(dn,attrs)
+            logger.debug("a new entry has been added to ldap %s" %added)
+
 
     def _check_broker(self):
-        #dbh = DatabaseHandler(URI_DB) 
         # TODO is dbh well created
         dbh = DatabaseHandler(self.db_uri) 
         broker_interval = self.config.broker_interval
@@ -60,7 +80,6 @@ class _Honeypotd:
             #dbh = DatabaseHandler(db_uri) 
             # check if there is new urls in the broker
             urls = dbh.newUrl()
-            print(urls)
             #urls = ['https://cas.unicaen.fr/login?service=https%3A%2F%2Fwebmail.unicaen.fr%3A443%2Fpublic%2Fpreauth-unicaen-fr.jsp#1']
             # if there is new url(s)
             if urls:
@@ -125,4 +144,4 @@ class _Honeypotd:
 if __name__=='__main__':
     honeypot = _Honeypotd()
     #honeypot.main()
-    honeypot._check_broker()
+    #honeypot._check_broker()

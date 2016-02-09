@@ -8,13 +8,12 @@ database:
     check_interval: 60 #seconds broker interval
 
 ldap:
-    uri: 127.0.0.1
-    port: 386
+    host: 10.0.3.132
+    port: 389
     base: dc=honeypot,dc=com
     user: cn=admin,dc=honeypot,dc=com
-    password: admin_ldap
-    base_object: ou=fake user,dc=honeypot,dc=com
-    check_interval: 60 #seconds broker interval
+    password: ubuntu
+    base_object: ou=fake_user,dc=honeypot,dc=com
 #inspector_interval: 60
 
 log:

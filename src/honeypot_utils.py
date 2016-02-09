@@ -57,6 +57,13 @@ class Config():
         self.inspector_bantime = configuration['inspector']['bantime']
         self.inspector_interval = configuration['inspector']['check_interval']
 
+        self.ldap_host = configuration['ldap']['host']
+        self.ldap_port = configuration['ldap']['port']
+        self.ldap_base = configuration['ldap']['base']
+        self.ldap_user = configuration['ldap']['user']
+        self.ldap_password = configuration['ldap']['password']
+        self.ldap_baseObject = configuration['ldap']['base_object']
+
         _init_logger(self.log_file, self.log_level)
 
         #if (LOG_FILE and LOG_LEVEL):
