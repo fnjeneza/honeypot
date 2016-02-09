@@ -110,8 +110,6 @@ class DatabaseHandler:
         """
         cur = self.cur
         conn = self.conn
-        cn = fname[0]+lname
-        cn = cn.lower()
         try:
             cur.execute("INSERT INTO person VALUES(?,?,?,?,?,?,?,?,datetime('now'))",
                     (person['USR'],
@@ -123,7 +121,7 @@ class DatabaseHandler:
                         person['BIR'],
                         person['GEN']))
         except sql.IntegrityError:
-            msg = '%s already exists' % cn
+            msg = '%s already exists' % person['USR']
             logger.error(msg)
             #raise Exception(msg)
 
