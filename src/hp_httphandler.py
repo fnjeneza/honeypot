@@ -3,6 +3,7 @@
 __author__ = "fnjeneza"
 
 from urllib.request import urlopen
+from urllib.error import URLError
 from html.parser import HTMLParser
 from http.client import HTTPConnection, HTTPSConnection
 from urllib.parse import urlparse, urlencode
@@ -67,13 +68,18 @@ def retrieve_form_fields(url):
     @return inputs: map of <input, type, name, value>
     """
     # retrieve the url content
-    page = urlopen(url)
-    
+    page = None
+    try:
+        page = urlopen(url)
+    except (URLError, ValueError) as e:
+        raise Exception (e)
+
+
     content_type = page.getheader('content-type')
     
     #check if it is a html page
     if not content_type.find("text/html")>=0:
-        raise Exception('Not an html page')
+        logger.info('%s Not an html page', url)
     
     charset='' # encoding
     if content_type.find("charset")>=0:
@@ -151,7 +157,11 @@ def handle_webspam(url, person, tags):
     return: html code response
     """
     # retrieve fields
-    form = retrieve_form_fields(url)
+    form = None
+    try:
+        form = retrieve_form_fields(url)
+    except Exception as e:
+        raise Exception(e)
 
     action = form['form']['action']
     inputs = form['inputs']

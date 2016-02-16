@@ -22,7 +22,7 @@ class BanAddress(models.Model):
 class Broker(models.Model):
     url = models.TextField()
     insert_date = models.DateTimeField(auto_now_add=True)
-    schedule_date = models.DateField(blank=True, null=True)
+    schedule_date = models.DateTimeField(blank=True, null=True)
     processed = models.BooleanField()
 
     class Meta:

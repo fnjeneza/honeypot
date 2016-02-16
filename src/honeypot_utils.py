@@ -22,7 +22,7 @@ def _init_logger(log_file='/tmp/honeypot.log',log_level='debug'):
     
     # stream logger
     sh = logging.StreamHandler()
-    sh_fmt = logging.Formatter('line %(lineno)s -- %(funcName)s -- %(message)s')
+    sh_fmt = logging.Formatter('line %(lineno)s -- %(filename)s.%(funcName)s -- %(message)s')
     sh.setLevel(logging.DEBUG)
     sh.setFormatter(sh_fmt)
     # add handler 
@@ -69,6 +69,10 @@ class Config():
         self.ldap_baseObject = configuration['ldap']['base_object']
 
         _init_logger(self.log_file, self.log_level)
+
+        # load tags
+        with open("tags.yaml") as _tags:
+            self.tags = yaml.load(_tags)
 
         #if (LOG_FILE and LOG_LEVEL):
         #    logger()

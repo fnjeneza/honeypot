@@ -103,7 +103,7 @@ def _unban_host(host):
     command  = ""
     #TODO log execution code
     returncode = subprocess.call(command.split())
-    print("returncode for %s" %command)
+    logger.info("returncode for %s" %command)
     #Todo log return code
     
 def _month_to_int(month):

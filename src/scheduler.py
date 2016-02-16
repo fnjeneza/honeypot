@@ -44,8 +44,8 @@ def work_hour():
         delta = sched-now
         if (delta.days>0
                 or (delta.days==0 and delta.seconds>0)):
-            date_planned = sched
-            return date_planned.timestamp()
+            #date_planned = sched
+            return sched #date_planned
 
 
 def _schedule():

@@ -28,7 +28,7 @@ class DatabaseHandler:
                     host=host,
                     port=port)
         except sql.Error as e:
-            logger.critical(e.pgerror)
+            logger.critical(e)
             exit()
 
         #cursor
@@ -40,16 +40,19 @@ class DatabaseHandler:
         return list of urls
         """
         logger.debug("check for new urls in the broker")
-        self.cur.execute("""SELECT url FROM broker WHERE
+        self.cur.execute("""SELECT url, id FROM broker WHERE
                 schedule_date is NULL""")
-        return [url[0] for url in self.cur.fetchall()]
+        return [(url[0],url[1]) for url in self.cur.fetchall()]
 
-    def updateScheduleDate(self,url,schedule):
+    def updateScheduleDate(self,uid,schedule):
         """
         update the schedule date
+        Arguments:
+            uid: url id primary key
+            schedule: datetime
         """
-        self.cur.execute("UPDATE broker SET schedule_date=%s WHERE url=%s",
-                (schedule,url,))
+        self.cur.execute("UPDATE broker SET schedule_date=%s WHERE id=%s",
+                (schedule,uid,))
         self.conn.commit()
 
     def generatePersonInfo(self):
@@ -140,6 +143,7 @@ class DatabaseHandler:
             #raise Exception(msg)
 
         conn.commit()
+        logger.info("%s added to db" % person['NCK'])
 
     def deletePersonInfo(self, fname, lname):
         """
@@ -200,8 +204,27 @@ class DatabaseHandler:
         """
         cur = self.cur
         cur.execute('SELECT last_check FROM last_check')
-        lc = cur.fetchone()[0]
-        return lc
+        lc = cur.fetchone()
+        if lc:
+            return lc[0]
+
+    def update_processed_value(self, uid):
+        """
+        update to True processed value in broker
+        uid: url id primary key
+        """
+        conn = self.conn
+        cur = self.cur
+
+        cur.execute("UPDATE broker set processed=True WHERE id=%s",(uid,))
+        conn.commit()
+
+    def remove_url(self, uid):
+        """
+        remove url from the table broker
+        """
+        self.cur.execute("DELETE FROM broker WHERE id=%s", (uid,))
+        self.conn.commit()
 
     def add_ban_address(self,adrs, current):
         """
