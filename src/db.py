@@ -197,6 +197,7 @@ class DatabaseHandler:
         conn = self.conn
         cur.execute("UPDATE last_check SET last_check=%s",(check_time,))
         conn.commit()
+        logger.debug("update last check")
 
     def last_check(self):
         """
@@ -204,9 +205,8 @@ class DatabaseHandler:
         """
         cur = self.cur
         cur.execute('SELECT last_check FROM last_check')
-        lc = cur.fetchone()
-        if lc:
-            return lc[0]
+        lc = cur.fetchone()[0]
+        return lc
 
     def update_processed_value(self, uid):
         """
