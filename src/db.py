@@ -29,8 +29,7 @@ class DatabaseHandler:
                     port=port)
         except sql.Error as e:
             logger.critical(e.pgerror)
-            import sys
-            sys.exit()
+            exit()
 
         #cursor
         self.cur = self.conn.cursor()
@@ -49,7 +48,7 @@ class DatabaseHandler:
         """
         update the schedule date
         """
-        self.cur.execute("UPDATE broker SET schedule_date=? WHERE url=?",
+        self.cur.execute("UPDATE broker SET schedule_date=%s WHERE url=%s",
                 (schedule,url,))
         self.conn.commit()
 
@@ -65,14 +64,14 @@ class DatabaseHandler:
         cur.execute( "SELECT count(id) from last_name")
         length = cur.fetchone()[0]
         _id = randrange(length)+1
-        cur.execute('SELECT lname from last_name WHERE id=?', (_id,))
+        cur.execute('SELECT lname from last_name WHERE id=%s', (_id,))
         lname = cur.fetchone()[0]
 
         # first_name
         cur.execute( "SELECT count(id) from first_name")
         length = cur.fetchone()[0]
         _id = randrange(length)+1
-        cur.execute('SELECT fname, gender from first_name WHERE id=?', (_id,))
+        cur.execute('SELECT fname, gender from first_name WHERE id=%s', (_id,))
         fname, gender = cur.fetchone()
         
         #common name
@@ -83,7 +82,7 @@ class DatabaseHandler:
         cur.execute( "SELECT count(id) from password")
         length = cur.fetchone()[0]
         _id = randrange(length)+1
-        cur.execute('SELECT passwd from password WHERE id=?', (_id,))
+        cur.execute('SELECT passwd from password WHERE id=%s', (_id,))
         password = cur.fetchone()[0]
 
         # mail
@@ -122,7 +121,7 @@ class DatabaseHandler:
         cur = self.cur
         conn = self.conn
         try:
-            cur.execute("INSERT INTO person VALUES(?,?,?,?,?,?,?,?,datetime('now'))",
+            cur.execute("INSERT INTO person VALUES(%s,%s,%s,%s,%s,%s,%s,%s,datetime('now'))",
                     (person['USR'],
                         url,
                         person['NCK'],
@@ -149,7 +148,7 @@ class DatabaseHandler:
 
         cn = fname+' '+lname
         try:
-            cur.execute("DELETE FROM person WHERE cn=?",(cn,))
+            cur.execute("DELETE FROM person WHERE cn=%s",(cn,))
         except:
             msg = '%s can not be deleted' % cn
             logger.error(msg)
@@ -176,7 +175,7 @@ class DatabaseHandler:
         cur = self.cur
         conn = self.conn
         try:
-            cur.execute("INSERT INTO form(url,form, modified) VALUES(?,?,datetime('now'))",
+            cur.execute("INSERT INTO form(url,form, modified) VALUES(%s,%s,datetime('now'))",
                     (url,str(form)))
         except:
             logger.error('saving form error')
@@ -188,7 +187,7 @@ class DatabaseHandler:
         """
         cur = self.cur
         conn = self.conn
-        cur.execute("UPDATE last_check SET last_check=?",(check_time,))
+        cur.execute("UPDATE last_check SET last_check=%s",(check_time,))
         conn.commit()
 
     def last_check(self):
@@ -214,7 +213,7 @@ class DatabaseHandler:
         cur = self.cur
         conn = self.conn
         for adr in adrs:
-            cur.execute('INSERT INTO ban_address VALUES(?,?)',(adr, current))
+            cur.execute('INSERT INTO ban_address VALUES(%s,%s)',(adr, current))
         conn.commit()
 
     def ban_address(self):
