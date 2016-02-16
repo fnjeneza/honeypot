@@ -8,11 +8,7 @@ from honeypot_web.models import Broker
 
 # Create your views here.
 def index(request):
-    url_spammer = None
-    try:
-        url_spammer = request.POST['url_spammer']
-    except MultiValueDictKeyError:
-        pass
+    url_spammer = request.POST.get('url_spammer', None)
     
     if url_spammer :
         broker = Broker(url=url_spammer,

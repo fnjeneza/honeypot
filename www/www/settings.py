@@ -77,10 +77,11 @@ WSGI_APPLICATION = 'www.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        #'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-        'NAME':
-        os.path.join('/home/njeneza/Workspace/honey-pot/src/sql/', 'honeypot.db'),
+        'ENGINE': 'django.db.backends.postgresql',
+        'HOST': '10.0.3.132',
+        'NAME': 'honeypot_db',
+        'USER': 'honey',
+        'PASSWORD': '123456'
     }
 }
 

@@ -11,8 +11,8 @@ from django.db import models
 
 
 class BanAddress(models.Model):
-    ip = models.TextField(primary_key=True, blank=True)
-    ban_date = models.TextField(blank=True, null=True)  # This field type is a guess.
+    ip = models.TextField(primary_key=True)
+    ban_date = models.FloatField(blank=True, null=True)
 
     class Meta:
         managed = False
@@ -20,8 +20,7 @@ class BanAddress(models.Model):
 
 
 class Broker(models.Model):
-    id = models.IntegerField(primary_key=True, blank=True)  # AutoField?
-    url = models.URLField()
+    url = models.TextField()
     insert_date = models.DateTimeField(auto_now_add=True)
     schedule_date = models.DateField(blank=True, null=True)
     processed = models.BooleanField()
@@ -29,15 +28,3 @@ class Broker(models.Model):
     class Meta:
         managed = False
         db_table = 'broker'
-
-
-class DjangoMigrations(models.Model):
-    id = models.IntegerField(primary_key=True)  # AutoField?
-    app = models.CharField(max_length=255)
-    name = models.CharField(max_length=255)
-    applied = models.DateTimeField()
-
-    class Meta:
-        managed = False
-        db_table = 'django_migrations'
-
