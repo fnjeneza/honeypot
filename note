@@ -91,3 +91,6 @@ tous les champs dont on tient compte.
 
 Dépendance; libpq
 
+Afin de garder l'application simpliste, l'utilisation d'un service de
+message\foot{Message queuing service ou Message broker} a été abandonnée. Elle nécessiterait la
+mise en place d'un serveur MQ.
