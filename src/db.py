@@ -2,7 +2,7 @@
 
 __author__ = 'fnjeneza'
 
-import sqlite3 as sql
+import psycopg2 as sql
 from random import randrange, gauss
 from datetime import date, datetime
 from honeypot_utils import get_logger
@@ -11,7 +11,7 @@ logger = get_logger(__name__)
 
 
 class DatabaseHandler:
-    def __init__(self, path, port=None, userId=None, passwd=None, pilote="sqlite3"):
+    def __init__(self, database, user, password, host, port=5432):
         """
         path: path to the database
         port: port used by the database
@@ -19,8 +19,19 @@ class DatabaseHandler:
         passwd: password 
         pilote: sqlite3, postgresql, mysql, mariadb
         """
+        self.conn = None
         #connection to the base
-        self.conn = sql.connect(path)
+        try:
+            self.conn = sql.connect(database=database,
+                    user=user,
+                    password=password,
+                    host=host,
+                    port=port)
+        except sql.Error as e:
+            logger.critical(e.pgerror)
+            import sys
+            sys.exit()
+
         #cursor
         self.cur = self.conn.cursor()
     

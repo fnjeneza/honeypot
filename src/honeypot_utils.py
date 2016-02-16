@@ -45,7 +45,11 @@ class Config():
         with open('config.yaml') as config_file:
             configuration = yaml.load(config_file)
 
-        self.db_uri = configuration['database']['uri']
+        self.db_host = configuration['database']['host']
+        self.db_user = configuration['database']['user']
+        self.db_password = configuration['database']['password']
+        self.db_name = configuration['database']['db_name']
+        self.db_port = configuration['database']['port']
         self.broker_interval = configuration['database']['check_interval']
 
         self.log_file = configuration['log']['file']

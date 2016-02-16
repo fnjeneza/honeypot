@@ -76,6 +76,7 @@ user
 password
 host
 port
+
 search:
 	baseObject
 	objectclass
@@ -87,4 +88,6 @@ Vérifier à 'initialisation l'existence des branche dans le DIT
 
 Dans le main, il faut vérifier le site, si il est valide ou pas si il dispose de
 tous les champs dont on tient compte.
+
+Dépendance; libpq
 

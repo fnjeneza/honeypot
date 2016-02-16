@@ -1,10 +1,11 @@
 # Honeypot's Config file
 
 database:
-    type: sqlite
-    uri: sql/honeypot.db
-    user: test
-    password: testpw
+    host: 10.0.3.132
+    user: honey
+    password: 123456
+    port: 5432
+    db_name: honeypot_db
     check_interval: 60 #seconds broker interval
 
 ldap:
