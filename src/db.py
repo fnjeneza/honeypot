@@ -87,9 +87,12 @@ class DatabaseHandler:
 
         # mail
         email = lname.lower()+"."+fname.lower()+'@unicaen.fr'
+
+        # special char
         specialChar = {'é':'e','è':'e','ê':'e','ç':'c','à':'a','î':'i'}
         for char in specialChar:
             email = email.replace(char, specialChar[char])
+            cn = cn.replace(char, specialChar[char])
 
         # birth date
         # gauss distribution
@@ -121,7 +124,7 @@ class DatabaseHandler:
         cur = self.cur
         conn = self.conn
         try:
-            cur.execute("INSERT INTO person VALUES(%s,%s,%s,%s,%s,%s,%s,%s,datetime('now'))",
+            cur.execute("INSERT INTO person VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s)",
                     (person['USR'],
                         url,
                         person['NCK'],
@@ -129,7 +132,8 @@ class DatabaseHandler:
                         person['EML'],
                         person['PWD'],
                         person['BIR'],
-                        person['GEN']))
+                        person['GEN'],
+                        date.today()))
         except sql.IntegrityError:
             msg = '%s already exists' % person['USR']
             logger.error(msg)
@@ -175,8 +179,8 @@ class DatabaseHandler:
         cur = self.cur
         conn = self.conn
         try:
-            cur.execute("INSERT INTO form(url,form, modified) VALUES(%s,%s,datetime('now'))",
-                    (url,str(form)))
+            cur.execute("INSERT INTO form(url,form, modified) VALUES(%s,%s,%s)",
+                    (url,str(form),date.today()))
         except:
             logger.error('saving form error')
         conn.commit()
