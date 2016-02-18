@@ -76,6 +76,11 @@ def retrieve_form_fields(url):
 
 
     content_type = page.getheader('content-type')
+    set_cookie = page.getheader('Set-Cookie')
+    cookie=None
+    if set_cookie:
+        cookie, sep, tail =  set_cookie.partition(';')
+    logger.debug("set-cookie %s" % cookie)
     
     #check if it is a html page
     if not content_type.find("text/html")>=0:
@@ -108,9 +113,9 @@ def retrieve_form_fields(url):
 
     hp.feed(text)
     
-    return hp.get_input_attr()
+    return hp.get_input_attr(), cookie
 
-def submit_form(url, params, method = 'POST', userAgent=None):
+def submit_form(url, params,cookie=None, method = 'POST', userAgent=None):
     """
     submit the form with completed input
     """
@@ -129,6 +134,9 @@ def submit_form(url, params, method = 'POST', userAgent=None):
         "rv:24.0) Gecko/20100101 Firefox/24.0)")}
     header["Content-Type"]="application/x-www-form-urlencoded"
 
+    if cookie:
+        header['Cookie']=cookie
+
     if(scheme.find("https")>=0):
         #connection
         conn = HTTPSConnection(host,port)
@@ -136,6 +144,8 @@ def submit_form(url, params, method = 'POST', userAgent=None):
         conn = HTTPConnection(host,port)
 
     data = urlencode(params)
+
+    logger.debug('header %s' % header)
 
     req = conn.request(method, path, data, header) #request
     resp = conn.getresponse() #response
@@ -158,8 +168,9 @@ def handle_webspam(url, person, tags):
     """
     # retrieve fields
     form = None
+    cookie = None
     try:
-        form = retrieve_form_fields(url)
+        form, cookie = retrieve_form_fields(url)
     except Exception as e:
         raise Exception(e)
 
@@ -179,9 +190,13 @@ def handle_webspam(url, person, tags):
 
     if action.find('http')<0:
         u = urlparse(url)
-        url = u.scheme+"://"+u.netloc+"/"+action
+        logger.debug("action %s" % action)
+        sep = '' if action.startswith('/') else '/'
+        url = '%s://%s%s%s' %(u.scheme,u.netloc,sep,action)
+
+        #url = u.scheme+"://"+u.netloc+"/"+action
     
     logger.debug("url %s" %url)
-    code = submit_form(url, params)
+    code = submit_form(url, params, cookie)
     return code
 

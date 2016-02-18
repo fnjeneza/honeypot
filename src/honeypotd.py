@@ -156,5 +156,5 @@ class _Honeypotd:
 if __name__=='__main__':
     honeypot = _Honeypotd()
     #honeypot.main()
-    #honeypot._check_broker()
-    honeypot._check_inspector()
+    honeypot._check_broker()
+    #honeypot._check_inspector()
