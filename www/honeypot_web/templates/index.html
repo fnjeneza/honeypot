@@ -1,21 +1,100 @@
 <!DOCTYPE html>
-<html>
-	<head>
-		<title>Honeypot</title>
-	</head>
-	<body>
-		<form action='.' method='POST' autocomplete='off'>
-			{% csrf_token %}
-			URL:<input type='text' name='url_spammer' value=''><br>
-			<input type='submit' value='Soumettre'>
-		</form>
-		<ul>
-			{% if last_urls %}
-			Derniers URL soumis:<br>
-			{% for url in last_urls %}
-				<li>{{url}}</li>
-				{%endfor%}
-				{%endif%}
-		</ul>
-	</body>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="honeypot web page">
+    <meta name="author" content="fnjeneza">
+    <link rel="icon" href="">
+
+    <title>HoneyPot</title>
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
+      integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7"
+      crossorigin="anonymous">
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="../../assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="http://getbootstrap.com/examples/cover/cover.css" rel="stylesheet">
+  </head>
+
+  <body>
+    <div class="site-wrapper">
+
+      <div class="site-wrapper-inner">
+
+        <div class="cover-container">
+
+          <div class="masthead clearfix">
+            <div class="inner">
+              <h3 class="masthead-brand">Honeypot Unicaen</h3>
+              <!--
+              <nav>
+                <ul class="nav masthead-nav">
+                  <li class="active"><a href="#">Home</a></li>
+                  <li><a href="#">Features</a></li>
+                  <li><a href="#">Contact</a></li>
+                </ul>
+              </nav>
+            -->
+            </div>
+          </div>
+
+          <div class="inner cover">
+            <h1 class="cover-heading">Leurrez ceux qui croient vous leurrer.</h1>
+            <form method="POST" action="." autocomplete="off">
+              {% csrf_token %}
+              <p class="lead">
+                <div class="input-group">
+                  <span class="input-group-addon" id="basic-addon3">https://example.com/</span>
+                  <input type="text" name="url_spammer" class="form-control" id="basic-url" aria-describedby="basic-addon3">
+                  <span class="input-group-btn">
+                    <button class="btn btn-default" type="submit">Soumettre</button>
+                  </span>
+                </div>
+              </p>
+          </form>
+
+
+          </div>
+          <div>
+            <ul>
+        			{% if last_urls %}
+        			Derniers URL soumis:<br>
+        			{% for url in last_urls %}
+        				<li>{{url}}</li>
+        				{%endfor%}
+        				{%endif%}
+        		</ul>
+          </div>
+          <!--
+          <div class="mastfoot">
+            <div class="inner">
+              <p>Cover template for <a href="http://getbootstrap.com">Bootstrap</a>, by <a href="https://twitter.com/mdo">@mdo</a>.</p>
+            </div>
+          </div>
+        -->
+
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
+    integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
+    crossorigin="anonymous"></script>
+  </body>
 </html>
