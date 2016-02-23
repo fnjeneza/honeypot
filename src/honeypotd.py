@@ -65,7 +65,6 @@ class _Honeypotd:
             password = self.config.ldap_password
             baseObject = self.config.ldap_baseObject
             host = self.config.ldap_host
-             #       self.config.ldap_port)
             hp_ldap = LDAP(user, password, baseObject, host)
             cn = "%s %s" % (person['NCK'], person['NAM'])
             dn = 'cn='+cn+','+self.config.ldap_baseObject
@@ -81,7 +80,6 @@ class _Honeypotd:
 
 
     def _check_broker(self):
-        # TODO is dbh well created
         dbh = self.db #DatabaseHandler(self.db_uri) 
         broker_interval = self.config.broker_interval
 
@@ -89,8 +87,6 @@ class _Honeypotd:
             #dbh = DatabaseHandler(db_uri) 
             # check if there is new urls in the broker
             urls = dbh.newUrl()
-            #urls = ['https://cas.unicaen.fr/login?service=https%3A%2F%2Fwebmail.unicaen.fr%3A443%2Fpublic%2Fpreauth-unicaen-fr.jsp#1']
-            # if there is new url(s)
             if urls:
                 for url,uid in urls:
                     logger.info("processing %s" % url)
@@ -105,12 +101,9 @@ class _Honeypotd:
                     wait_time = schedule-now
                     # wait time in seconds
                     wait_time = wait_time.total_seconds()
-                    # TODO remove below line
-                    wait_time = 2
                     logger.debug('wait time %d' % wait_time)
                     # wait till time is over and send info to the spam webpage
                     Timer(wait_time,self._generate_and_send_info, args=(url,uid,)).start()
-                    # TODO INFO handle a request
 
             time.sleep(broker_interval)
 
@@ -119,7 +112,6 @@ class _Honeypotd:
         supervision of the log file
         """
         logger.info('start inspector')
-        #dbh = DatabaseHandler(db_uri)
         inspect_file = self.config.inspector_logfile
         logger.debug('log file to inspect "%s"' % inspect_file)
         regexfile = self.config.inspector_regex
@@ -130,31 +122,30 @@ class _Honeypotd:
             regex = rf.read()
 
         last_check = dh.last_check()
-        #last_check = datetime.datetime.fromtimestamp(last_check)
         logger.info('last check %s' % last_check)
         inspector_interval = self.config.inspector_interval
         logger.debug('inspector interval %s' % inspector_interval)
         while True:
             logger.info("checking '%s'" % inspect_file)
+            cmd = self.config.inspector_command
             # check the log
-            ip_list = supervisor(inspect_file, regex, last_check)
+            ip_list = supervisor(inspect_file, regex, last_check, cmd)
             now = datetime.datetime.now()
             # last update
             dh.update_last_check(now)
             last_check = now
             # add banned address to db
             dh.add_ban_address(ip_list, now)
+            logger.debug(ip_list)
             logger.debug("wait for next execution")
             time.sleep(inspector_interval)
 
     def main(self):
         
-        with futures.ThreadPoolExecutor(1) as e:
-            e.submit(_check_broker)
+        with futures.ThreadPoolExecutor(2) as e:
+            e.submit(self._check_broker)
             e.submit(self._check_inspector)
 
 if __name__=='__main__':
     honeypot = _Honeypotd()
-    #honeypot.main()
-    honeypot._check_broker()
-    #honeypot._check_inspector()
+    honeypot.main()

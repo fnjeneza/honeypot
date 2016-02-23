@@ -6,7 +6,7 @@ from honeypot_utils import get_logger
 # logger
 logger = get_logger(__name__)
 
-def supervisor(journal, regex, last_check):
+def supervisor(journal, regex, last_check, cmd):
     """
     Analyse the file to find regex
     
@@ -40,7 +40,7 @@ def supervisor(journal, regex, last_check):
                 month, day, hour, minute)
             if not handled:
                 logger.info('ip to ban %s' % host)
-                _ban_host(host)
+                _ban_host(host, cmd)
                 hosts_blocked.append(host)
     
     return tuple(hosts_blocked)

@@ -24,7 +24,7 @@ log:
 inspector:
     logfile: files/log.test
     regex: files/regex.filter
-    command: iptables
+    command: iptables -L -t filter -A INPUT -source <host> -j DROP 
     bantime: 3600 # not implemented
     check_interval: 60
 
