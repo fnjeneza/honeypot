@@ -3,20 +3,24 @@
 __author__ = "fnjeneza"
 
 from threading import Timer
-#from hp_httphandler import retrieve_form_fields, submit_form
-from hp_httphandler import handle_webspam
-from db import DatabaseHandler
-from scheduler import work_hour
+from concurrent import futures
+from ldap import LDAP
 import yaml
 import time
-#import logging
-#from logging.handlers import RotatingFileHandler
-import sys
-from honeypot_utils import  get_logger, Config
-from concurrent import futures
 import datetime
+
+from hphttp import handle_webspam
+from db import DatabaseHandler
+from scheduler import work_hour
+from utils import  get_logger, Config
 from inspector import supervisor
-from ldap import LDAP
+
+import sys
+
+"""
+Handle the honeypot service
+This is the main module of the application
+"""
 
 logger = get_logger(__name__)
 

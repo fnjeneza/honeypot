@@ -7,7 +7,7 @@ from urllib.error import URLError
 from html.parser import HTMLParser
 from http.client import HTTPConnection, HTTPSConnection
 from urllib.parse import urlparse, urlencode
-from honeypot_utils import get_logger
+from utils import get_logger
 
 logger = get_logger(__name__)
 

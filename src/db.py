@@ -5,7 +5,7 @@ __author__ = 'fnjeneza'
 import psycopg2 as sql
 from random import randrange, gauss
 from datetime import date, datetime
-from honeypot_utils import get_logger
+from utils import get_logger
 
 logger = get_logger(__name__)
 
